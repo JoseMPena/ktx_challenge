@@ -26,30 +26,25 @@ class Promo
   end
 
   def apply!(checkout)
-    return unless promo_items(checkout).any?
+    items = promo_items(checkout)
+    return if items.count < 2 || items.count < promo_amount
 
     # this will do fine for this amount of types, for scalability we should come with another solution.
     self.used = case type
                 when '2x1'
-                  apply_2x1(checkout)
+                  apply_2x1(items)
                 when 'bulk_discount'
-                  apply_bulk_discount(checkout)
+                  apply_bulk_discount(items)
                 end
   end
 
-  # really??
-  def apply_2x1(checkout)
-    items = promo_items(checkout)
-    return unless items.count > 1
+  # ??
+  def apply_2x1(items)
     free_items = items.take(items.count / 2)
-    result = []
     free_items.each { |item| item.price = 0 }
-    result.reduce { |a, b| a && b }
   end
 
-  def apply_bulk_discount(checkout)
-    items = promo_items(checkout)
-    return unless items.count >= promo_amount
+  def apply_bulk_discount(items)
     # promo_items.update_all
     items.each do |item|
       item.price = promo_price || ((item.price.to_f / 3.0) * 2)

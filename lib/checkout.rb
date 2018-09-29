@@ -12,12 +12,12 @@ class Checkout
   end
 
   def total
-    apply_promos
+    apply_promos!
     dirty_total = @cart.map(&:price).reduce(:+)
     dirty_total.round(2)
   end
 
-  def apply_promos
+  def apply_promos!
     pricing_rules.reject(&:used).each { |promo| promo.apply!(self) }
   end
 end

@@ -5,8 +5,6 @@ require 'promo'
 describe Promo, :attributes do
   it 'has necessary attributes' do
     %i[product_code type promo_price promo_amount].each do |attr|
-      # assert promo.respond_to?(attr)
-      # assert_respond_to Promo.new, attr
       expect(Promo.new).must_respond_to attr
     end
   end
